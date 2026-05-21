@@ -28,29 +28,22 @@ jobs:
 
       - name: Build and Push Frappe Docker Image
         run: |
-          export APPS_JSON='[
-            {
-              "url": "https://github.com/frappe/erpnext",
-              "branch": "version-15"
-            },
-            {
-              "url": "https://github.com/frappe/hrms.git",
-              "branch": "version-15"
-            },
-            {
-              "url": "https://github.com/frappe/helpdesk.git",
-              "branch": "v1.24.1"
-            }
-          ]'
-          export APPS_JSON_BASE64=$(echo -n "${APPS_JSON}" | base64 -w 0)
+          APPS_JSON='[{"url":"https://github.com/frappe/erpnext","branch":"version-15"},{"url":"https://github.com/frappe/hrms","branch":"version-15"},{"url":"https://github.com/frappe/helpdesk","branch":"v1.24.1"}]'
+
+          APPS_JSON_BASE64=$(echo -n "$APPS_JSON" | base64 -w 0)
+
+          echo "=== Verifying base64 decoded JSON ==="
+          echo "$APPS_JSON_BASE64" | base64 -d
+          echo ""
+          echo "=== Starting build ==="
 
           docker buildx build \
             --no-cache \
             --platform linux/amd64 \
             --build-arg FRAPPE_PATH=https://github.com/frappe/frappe \
             --build-arg FRAPPE_BRANCH=version-15 \
-            --build-arg PYTHON_VERSION=3.14.0 \
-            --build-arg NODE_VERSION=24.10.0 \
+            --build-arg PYTHON_VERSION=3.11.9 \
+            --build-arg NODE_VERSION=18.20.2 \
             --build-arg APPS_JSON_BASE64="$APPS_JSON_BASE64" \
             --tag devsohanur653/erpnext:helpdesk \
             --file images/custom/Containerfile \
