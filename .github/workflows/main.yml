@@ -41,6 +41,10 @@ jobs:
             {
               "url": "https://github.com/frappe/helpdesk",
               "branch": "v1.24.1"
+            },
+            {
+            "url":"https://github.com/frappe/telephony.git",
+            "branch":"telephony"
             }
           ]
           EOF
