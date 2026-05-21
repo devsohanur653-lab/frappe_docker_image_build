@@ -1,5 +1,4 @@
 name: Frappe Docker Build
-
 on:
   workflow_dispatch:
     inputs:
@@ -14,47 +13,45 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
-          repository: Excel-Technologies-Ltd/excel-frappe-docker
+          repository: frappe/frappe_docker
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Build and Push Frappe Docker Image
         run: |
           export APPS_JSON='[
             {
-            "url": "https://github.com/frappe/erpnext",
-            "branch": "version-16"
+              "url": "https://github.com/frappe/erpnext",
+              "branch": "version-16"
             },
             {
-            "url": "https://github.com/frappe/hrms.git",
-            "branch": "version-16"
+              "url": "https://github.com/frappe/hrms.git",
+              "branch": "version-16"
             },
             {
-            "url": "https://github.com/frappe/helpdesk.git",
-            "branch": "v1.24.1"
+              "url": "https://github.com/frappe/helpdesk.git",
+              "branch": "v1.24.1"
             }
-            
-          ]
-          '
-
-          export APPS_JSON_BASE64=$(echo ${APPS_JSON} | base64 -w 0)
+          ]'
+          export APPS_JSON_BASE64=$(echo -n "${APPS_JSON}" | base64 -w 0)
 
           docker buildx build \
-          --no-cache \
-          --platform linux/amd64 \
-          --build-arg FRAPPE_PATH=https://github.com/frappe/frappe \
-          --build-arg FRAPPE_BRANCH=version-16 \
-          --build-arg PYTHON_VERSION=3.14.0\
-          --build-arg NODE_VERSION=24.10.0 \
-          --build-arg APPS_JSON_BASE64="$APPS_JSON_BASE64" \
-          --tag devsohanur653/erpnext:helpdesk \
-          --file images/custom/Containerfile \
-          --push .
+            --no-cache \
+            --platform linux/amd64 \
+            --build-arg FRAPPE_PATH=https://github.com/frappe/frappe \
+            --build-arg FRAPPE_BRANCH=version-16 \
+            --build-arg PYTHON_VERSION=3.14.0 \
+            --build-arg NODE_VERSION=24.10.0 \
+            --build-arg APPS_JSON_BASE64="$APPS_JSON_BASE64" \
+            --tag devsohanur653/erpnext:helpdesk \
+            --file images/custom/Containerfile \
+            --push .
