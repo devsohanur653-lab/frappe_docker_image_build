@@ -43,7 +43,7 @@ jobs:
               "branch": "v1.24.1"
             },
             {
-            "url":"https://github.com/frappe/telephony.git",
+            "url":"https://github.com/frappe/telephony",
             "branch":"telephony"
             }
           ]
