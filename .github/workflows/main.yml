@@ -44,7 +44,7 @@ jobs:
             },
             {
             "url":"https://github.com/frappe/telephony",
-            "branch":"telephony"
+            "branch":"develop"
             }
           ]
           EOF
