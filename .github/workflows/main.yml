@@ -45,6 +45,9 @@ jobs:
             {
             "url":"https://github.com/frappe/telephony",
             "branch":"develop"
+            },{
+            "url":"https://github.com/devsohanur653-lab/runtime.git",
+            "branch":"develop"
             }
           ]
           EOF
